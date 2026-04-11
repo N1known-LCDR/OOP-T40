@@ -13,9 +13,9 @@
 
 
     <properties>
-        <maven.compiler.source>25</maven.compiler.source>
-        <maven.compiler.target>25</maven.compiler.target>
-        <javafx.version>25</javafx.version>
+        <maven.compiler.source>25</maven.compiler.source> // changed from 17 to 25
+        <maven.compiler.target>25</maven.compiler.target> // changed from 17 to 25
+        <javafx.version>25</javafx.version> // changed from 21 to 25
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
     </properties>
 
