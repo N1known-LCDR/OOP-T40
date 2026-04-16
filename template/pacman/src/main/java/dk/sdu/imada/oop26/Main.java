@@ -1,14 +1,13 @@
 package dk.sdu.imada.oop26;
 
+import dk.sdu.imada.oop26.Main.GameState;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-//import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-//import javafx.scene.shape.Circle;
-//import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 //import javafx.scene.shape.Arc;
 //import javafx.scene.shape.ArcType;
@@ -28,22 +27,26 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage){
-        Pane root = new Pane();
+        // Ændre på layout så vi flytter score ud og juster
+        BorderPane layout = new BorderPane();
+        Pane gamePane = new Pane();
 
         // UI + Manager
         Label ui = new Label();
-        ui.setTranslateY(200);
+        ui.setStyle("-fx-font-size: 16; -fx-padding: 5;");
         GameManager manager = new GameManager(ui);
-        root.getChildren().add(ui);
+        
+        layout.setTop(ui);
+        layout.setCenter(gamePane);
 
         //objects
-        map = new Map(root);
-        player = new Player(root, map, manager);
-        ghost = new Ghost(root, map, manager);
+        map = new Map(gamePane);
+        player = new Player(gamePane, map, manager);
+        ghost = new Ghost(gamePane, map, manager);
 
         player.setGhost(ghost);
 
-        Scene scene = new Scene(root, 760, 600);
+        Scene scene = new Scene(layout, 760, 630);
 
         //Input
         scene.setOnKeyPressed(e -> {
