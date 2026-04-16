@@ -32,11 +32,24 @@ public class Main extends Application {
         Pane gamePane = new Pane();
 
         // UI + Manager
-        Label ui = new Label();
-        ui.setStyle("-fx-font-size: 16; -fx-padding: 5;");
-        GameManager manager = new GameManager(ui);
         
-        layout.setTop(ui);
+        
+        Label scoreLabel = new Label("Score: 0");
+        Label livesLabel = new Label("Lives: 2");
+        Label stateLabel = new Label("State: Normal");
+
+        javafx.scene.layout.HBox uiBar = new javafx.scene.layout.HBox(20);
+        uiBar.setStyle("-fx-background-color: black; -fx-padding: 10;");
+        uiBar.getChildren().addAll(scoreLabel, livesLabel, stateLabel);
+
+        String labelStyle = "-fx-font-size: 16; -fx-text-fill: white; -fx-font-weight: bold;";
+        scoreLabel.setStyle(labelStyle);
+        livesLabel.setStyle(labelStyle);
+        stateLabel.setStyle(labelStyle);
+
+        GameManager manager = new GameManager(scoreLabel, livesLabel, stateLabel);
+    
+        layout.setTop(uiBar);
         layout.setCenter(gamePane);
 
         //objects
