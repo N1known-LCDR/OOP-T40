@@ -3,6 +3,7 @@ package dk.sdu.imada.oop26;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
+import java.util.List;
 
 public class Player {
     
@@ -12,16 +13,19 @@ public class Player {
     private int dx = 0;
     private int dy = 0;
 
+    public int getDx(){ return dx; }
+    public int getDy(){ return dy; }
+
     private long lastMove = 0;
 
     private Circle view;
     private Map map;
 
     private GameManager manager;
-    private Ghost ghost;
+    private List<Ghost> ghosts;
 
-    public void setGhost(Ghost ghost){
-        this.ghost = ghost;
+    public void setGhost(List<Ghost> ghosts){
+        this.ghosts = ghosts;
     }
 
     public Player(Pane root, Map map, GameManager manager) {
@@ -67,8 +71,28 @@ public class Player {
             checkDot();
         }
 
-        if (ghost == null) return;
+        if(ghosts == null) return;
+        for (Ghost ghost : ghosts){
+            if (!view.getBoundsInParent().intersects(ghost.getView().getBoundsInParent())){
+                continue;
+            }
 
+            switch (manager.getState()){
+                case NORMAL -> {
+                    manager.loseLife();
+                return; // stops after hit
+            }
+
+                case POWER -> {
+                    manager.addScore(200);
+                    ghost.respawn();
+                }
+                default -> {}
+            }
+
+        }
+
+        /*if (ghost == null) return;
         if (!view.getBoundsInParent().intersects(ghost.getView().getBoundsInParent())) return;
 
         switch (manager.getState()) {
@@ -88,7 +112,7 @@ public class Player {
             }
                 
 
-        }
+        }*/
     }
 
     private void updatePosition(){
