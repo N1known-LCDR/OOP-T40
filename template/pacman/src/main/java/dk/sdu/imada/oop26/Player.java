@@ -4,7 +4,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
-import javafx.scene.shape.Circle;
 
 
 public class Player {
@@ -16,6 +15,9 @@ public class Player {
     private int dy = 0;
 
     private long lastMove = 0;
+
+    // for at den åbner munden
+    private boolean mouthOpen = true;
 
     private Arc view;
     private Map map;
@@ -62,13 +64,13 @@ public class Player {
 
         int newRow = row + dy;
         int newCol = col + dx;
+        
 
-
-        if (!map.isWall(newRow, newCol)){
+        if (!map.isWall(newRow, newCol)) {
             row = newRow;
             col = newCol;
             updatePosition();
-
+            animateMouth();
             checkDot();
         }
 
@@ -99,6 +101,15 @@ public class Player {
     private void updatePosition(){
         view.setCenterX(col * map.TILE_SIZE + map.TILE_SIZE / 2);
         view.setCenterY(row * map.TILE_SIZE + map.TILE_SIZE / 2);
+    }
+
+    private void animateMouth() {
+        mouthOpen = !mouthOpen;
+        if (mouthOpen) {
+            view.setLength(270);
+        } else {
+            view.setLength(360);
+        }
     }
 
     public Arc getView(){
