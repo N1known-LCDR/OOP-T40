@@ -6,7 +6,6 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 //import javafx.scene.shape.Arc;
@@ -27,39 +26,24 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage){
-        // Ændre på layout så vi flytter score ud og juster
-        BorderPane layout = new BorderPane();
-        Pane gamePane = new Pane();
+        Pane root = new Pane();
+        // Sæt som mørk baggrund for at letter at se Pac Man
+        root.setStyle("-fx-background-color: black;");
 
         // UI + Manager
-        
-        
-        Label scoreLabel = new Label("Score: 0");
-        Label livesLabel = new Label("Lives: 2");
-        Label stateLabel = new Label("State: Normal");
-
-        javafx.scene.layout.HBox uiBar = new javafx.scene.layout.HBox(20);
-        uiBar.setStyle("-fx-background-color: black; -fx-padding: 10;");
-        uiBar.getChildren().addAll(scoreLabel, livesLabel, stateLabel);
-
-        String labelStyle = "-fx-font-size: 16; -fx-text-fill: white; -fx-font-weight: bold;";
-        scoreLabel.setStyle(labelStyle);
-        livesLabel.setStyle(labelStyle);
-        stateLabel.setStyle(labelStyle);
-
-        GameManager manager = new GameManager(scoreLabel, livesLabel, stateLabel);
-    
-        layout.setTop(uiBar);
-        layout.setCenter(gamePane);
+        Label ui = new Label();
+        ui.setTranslateY(570);
+        GameManager manager = new GameManager(ui);
+        root.getChildren().add(ui);
 
         //objects
-        map = new Map(gamePane);
-        player = new Player(gamePane, map, manager);
-        ghost = new Ghost(gamePane, map, manager);
+        map = new Map(root);
+        player = new Player(root, map, manager);
+        ghost = new Ghost(root, map, manager);
 
         player.setGhost(ghost);
 
-        Scene scene = new Scene(layout, 760, 630);
+        Scene scene = new Scene(root, 760, 600);
 
         //Input
         scene.setOnKeyPressed(e -> {

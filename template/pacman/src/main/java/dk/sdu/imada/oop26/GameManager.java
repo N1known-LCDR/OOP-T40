@@ -9,14 +9,10 @@ public class GameManager {
     private int lives = 3;
     private GameState state = GameState.NORMAL;
 
-    private Label scorLabel;
-    private Label livesLabel;
-    private Label stateLabel;
+    private Label uiLabel;
 
-    public GameManager(Label scorLabel, Label livesLabel, Label stateLabel){
-        this.scorLabel = scorLabel;
-        this.livesLabel = livesLabel;
-        this.stateLabel = stateLabel;
+    public GameManager(Label uiLabel){
+        this.uiLabel = uiLabel;
         updateUI();
     }
 
@@ -49,22 +45,10 @@ public class GameManager {
     }
 
     private void updateUI(){
-        scorLabel.setText("Score: " + score);
-        livesLabel.setText("Lives: " + lives);
-        
-        if (state == GameState.FINISHED) {
-            stateLabel.setText("Game Over - press x to restart");
-            stateLabel.setStyle("-fx-font-size: 16; -fx-text-fill: red; -fx-font-weight: bold;");
-        } else if (state == GameState.POWER) {
-            stateLabel.setText("State: Power");
-            stateLabel.setStyle("-fx-font-size: 16; -fx-text-fill: orange; -fx-font-weight: bold;");
-        } else if (state==GameState.IMMUNE) {
-            stateLabel.setText("State: Immune");
-            stateLabel.setStyle("-fx-font-size: 16; -fx-text-fill: green; -fx-font-weight: bold;");
+        if (state == GameState.FINISHED){
+            uiLabel.setText("Game Over - Score: " + score + " | Press X to restart");
         } else {
-            stateLabel.setText("State: Normal");
-            stateLabel.setStyle("-fx-font-size: 16; -fx-text-fill: white; -fx-font-weight: bold;");
-
+            uiLabel.setText("Score: " + score + " | Lives: " + lives + " | State: " + state);
         }
     }
 
