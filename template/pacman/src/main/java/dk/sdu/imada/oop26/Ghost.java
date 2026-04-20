@@ -16,12 +16,23 @@ public class Ghost {
 
     private GameManager manager;
 
+    private GhostBehavior behavior;
+
+    public int getRow(){
+        return row;
+    }
+
+    public int getCol(){
+        return col;
+    }
+
     private long lastMoveTime = 0;
     private final long MOVE_DELAY = 500_000_000; //0.5 seconds in nanoseconds
 
-    public Ghost(Pane root, Map map, GameManager manager) {
+    public Ghost(Pane root, Map map, GameManager manager, GhostBehavior behavior) {
         this.map = map;
         this.manager = manager;
+        this.behavior = behavior;
 
         view = new Circle(15);
         view.setFill(javafx.scene.paint.Color.RED);
@@ -40,7 +51,7 @@ public class Ghost {
                 moveAwayFromPlayer(player);
                 view.setFill(javafx.scene.paint.Color.GRAY);
             } else {
-                moveTowardsPlayer(player);
+                behavior.move(this, player, map);
                 view.setFill(javafx.scene.paint.Color.RED);
             }
 
@@ -58,7 +69,7 @@ public class Ghost {
         }*/
     }
 
-    public void moveTowardsPlayer(Player player){
+    /*public void moveTowardsPlayer(Player player){
         
         int newRow = row;
         int newCol = col;
@@ -79,7 +90,7 @@ public class Ghost {
             col = newCol;
         } else {
             moveRandom();
-        }
+        }*/
 
 
 
@@ -101,6 +112,24 @@ public class Ghost {
         } else {
             moveRandom();
         } */
+    //}
+
+    public void moveTowards(int targetRow, int targetCol){
+        int newRow = row;
+        int newCol = col;
+
+        if (targetRow < row) newRow--;
+        else if (targetRow > row) newRow++;
+
+        if(targetCol < col) newCol--;
+        else if (targetCol > col) newCol++;
+
+        if (!map.isWall(newRow, newCol)){
+            row = newRow;
+            col = newCol;
+        } else {
+            moveRandom();
+        }
     }
 
     public void moveAwayFromPlayer(Player player){
@@ -121,10 +150,8 @@ public class Ghost {
             }
         }
 
-    private void moveRandom(){
-        int[][] directions = {
-            {-1,0},{1,0},{0,-1},{0,1}
-        };
+    public void moveRandom(){
+        int[][] directions = {{-1,0},{1,0},{0,-1},{0,1}};
         for (int i = 0; i < 4; i++){
             int[] dir = directions[random.nextInt(4)];
             int newRow = row + dir[0];
