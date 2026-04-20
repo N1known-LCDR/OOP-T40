@@ -1,9 +1,11 @@
 package dk.sdu.imada.oop26;
 
+import java.util.List;
+
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
-import java.util.List;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
 
 public class Player {
     
@@ -18,7 +20,10 @@ public class Player {
 
     private long lastMove = 0;
 
-    private Circle view;
+    // for at den åbner munden
+    private boolean mouthOpen = true;
+
+    private Arc view;
     private Map map;
 
     private GameManager manager;
@@ -32,7 +37,9 @@ public class Player {
         this.map = map;
         this.manager = manager;
 
-        view = new Circle(15);
+        view = new Arc(0,0,15,15,45,270);
+        view.setType(ArcType.ROUND);
+        view.setFill(javafx.scene.paint.Color.YELLOW);
         updatePosition();
 
         root.getChildren().add(view);
@@ -40,10 +47,10 @@ public class Player {
 
     public void handleInput(KeyCode key) {
         switch(key){
-            case UP ->{dx = 0; dy = -1;}
-            case DOWN ->{dx = 0; dy = 1;}
-            case LEFT ->{dx = -1; dy = 0;}
-            case RIGHT ->{dx = 1; dy = 0;}
+            case UP ->{dx = 0; dy = -1; view.setStartAngle(135);}
+            case DOWN ->{dx = 0; dy = 1; view.setStartAngle(315);}
+            case LEFT ->{dx = -1; dy = 0; view.setStartAngle(225);}
+            case RIGHT ->{dx = 1; dy = 0; view.setStartAngle(45);}
             /*
             case W -> newRow--;
             case S -> newRow++;
@@ -61,13 +68,13 @@ public class Player {
 
         int newRow = row + dy;
         int newCol = col + dx;
+        
 
-
-        if (!map.isWall(newRow, newCol)){
+        if (!map.isWall(newRow, newCol)) {
             row = newRow;
             col = newCol;
             updatePosition();
-
+            animateMouth();
             checkDot();
         }
 
@@ -120,7 +127,16 @@ public class Player {
         view.setCenterY(row * map.TILE_SIZE + map.TILE_SIZE / 2);
     }
 
-    public Circle getView(){
+    private void animateMouth() {
+        mouthOpen = !mouthOpen;
+        if (mouthOpen) {
+            view.setLength(270);
+        } else {
+            view.setLength(360);
+        }
+    }
+
+    public Arc getView(){
         return view;
     }
 

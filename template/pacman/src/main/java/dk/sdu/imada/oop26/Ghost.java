@@ -1,10 +1,10 @@
 package dk.sdu.imada.oop26;
 
-import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
 import java.util.Random;
 
 import dk.sdu.imada.oop26.Main.GameState;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
 
 public class Ghost {
     private int row = 13;

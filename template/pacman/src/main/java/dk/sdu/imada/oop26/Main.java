@@ -2,6 +2,7 @@ package dk.sdu.imada.oop26;
 
 import java.util.List;
 
+import dk.sdu.imada.oop26.Main.GameState;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;

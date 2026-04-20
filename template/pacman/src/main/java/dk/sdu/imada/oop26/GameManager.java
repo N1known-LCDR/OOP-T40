@@ -48,7 +48,7 @@ public class GameManager {
         if (state == GameState.FINISHED){
             uiLabel.setText("Game Over - Score: " + score + " | Press X to restart");
         } else {
-        uiLabel.setText("Score: " + score + " | Lives: " + lives + " | State: " + state);
+            uiLabel.setText("Score: " + score + " | Lives: " + lives + " | State: " + state);
         }
     }
 
