@@ -1,18 +1,14 @@
 package dk.sdu.imada.oop26;
 
+import java.util.List;
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-//import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
-//import javafx.scene.shape.Circle;
-//import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-//import javafx.scene.shape.Arc;
-//import javafx.scene.shape.ArcType;
-import java.util.List;
 
 public class Main extends Application {
 
@@ -30,12 +26,41 @@ public class Main extends Application {
     @Override
     public void start(Stage stage){
         Pane root = new Pane();
+        root.setStyle("-fx-background-color: black;");
 
         // UI + Manager
         Label ui = new Label();
-        ui.setTranslateY(200);
+        ui.setLayoutX(40);
+        ui.setLayoutY(6);
+        ui.setStyle(
+            "-fx-font-size: 18px;" +
+            "-fx-font-weight: bold;" +
+            "-fx-text-fill: white;" +
+            "-fx-background-color: rgba(0,0,0,0.35);" +
+            "-fx-padding: 4px 8px 4px 8px;"
+        );
+
+        Label help = new Label("Use arrow keys to move");
+        help.setLayoutX(502);
+        help.setLayoutY(6);
+        help.setStyle(
+            "-fx-font-size: 18px;" +
+            "-fx-font-weight: bold;" +
+            "-fx-text-fill: white;" +
+            "-fx-background-color: rgba(0,0,0,0.35);" +
+            "-fx-padding: 4px 8px 4px 8px;"
+        );
+
+        Label endMessage = new Label("");
+        endMessage.setLayoutX(220);
+        endMessage.setLayoutY(20);
+        endMessage.setStyle(
+            "-fx-font-size: 22px;" +
+            "-fx-font-weight: bold;" +
+            "-fx-text-fill: red;"
+        );
+
         GameManager manager = new GameManager(ui);
-        root.getChildren().add(ui);
 
         //objects
         map = new Map(root);
@@ -48,6 +73,9 @@ public class Main extends Application {
         ghosts = List.of(hunter, assassin, random, passive);
 
         player.setGhost(ghosts);
+
+        // Keep overlays on top of map/characters.
+        root.getChildren().addAll(ui, help, endMessage);
 
         /*ghost = new Ghost(root, map, manager);
         player.setGhost(ghost);*/
@@ -77,7 +105,10 @@ public class Main extends Application {
 
                 //stop
                 if (manager.getState() == GameState.FINISHED){
+                    endMessage.setText("Game Over - Press X to restart");
                     return;
+                } else {
+                    endMessage.setText("");
                 }
 
                 player.update();

@@ -1,1 +1,10 @@
-/home/sandra/git/sdu/teaching/26_oop/labs/0_groupProject/template/pacman/src/main/java/dk/sdu/imada/oop26/Main.java
+/root/Projects/OOP-T40/template/pacman/src/main/java/dk/sdu/imada/oop26/GhostBehavior.java
+/root/Projects/OOP-T40/template/pacman/src/main/java/dk/sdu/imada/oop26/Main.java
+/root/Projects/OOP-T40/template/pacman/src/main/java/dk/sdu/imada/oop26/AssassinBehavior.java
+/root/Projects/OOP-T40/template/pacman/src/main/java/dk/sdu/imada/oop26/PassiveBehavior.java
+/root/Projects/OOP-T40/template/pacman/src/main/java/dk/sdu/imada/oop26/Player.java
+/root/Projects/OOP-T40/template/pacman/src/main/java/dk/sdu/imada/oop26/Map.java
+/root/Projects/OOP-T40/template/pacman/src/main/java/dk/sdu/imada/oop26/GameManager.java
+/root/Projects/OOP-T40/template/pacman/src/main/java/dk/sdu/imada/oop26/Ghost.java
+/root/Projects/OOP-T40/template/pacman/src/main/java/dk/sdu/imada/oop26/RandomBehavior.java
+/root/Projects/OOP-T40/template/pacman/src/main/java/dk/sdu/imada/oop26/HunterBehavior.java
