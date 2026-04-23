@@ -11,9 +11,9 @@ public class Map {
     public static final int DOT = 0;
     public static final int POWER = 2;
     public static final int EMPTY = -1;
-    
+    public static final int TELEPORTER = 3;
 
-    // 0 = dot, 1= wall, 2 = power
+    // 0 = dot, 1= wall, 2 = power, 3 = teleporter
     private int[][] map ={
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
         {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1},
@@ -22,7 +22,7 @@ public class Map {
         {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
         {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
         {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+        {3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3},
         {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1}, 
         {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
         {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
@@ -36,6 +36,8 @@ public class Map {
 
     private Pane root;
 
+    private Rectangle[][] teleporters;
+
     public int getTile(int row, int col){
         return map[row][col];
     }
@@ -44,9 +46,14 @@ public class Map {
         map[row][col] = value;
     }
 
+    public int getMapWidth() {
+        return map[0].length;
+    }
+
     public Map(Pane root){
         this.root = root;
         dots = new Circle[map.length][map[0].length];
+        teleporters = new Rectangle[map.length][map[0].length];
         draw();
     }
 
@@ -91,6 +98,20 @@ public class Map {
 
                     dots[row][col] = dot; // store reference
                     root.getChildren().add(dot);
+                }
+
+                // TELEPORTERS (also store)
+                if (map[row][col] == TELEPORTER) {
+                    Rectangle teleporter = new Rectangle(
+                        col * TILE_SIZE,
+                        row * TILE_SIZE,
+                        TILE_SIZE,
+                        TILE_SIZE
+                    );
+                    teleporter.setFill(javafx.scene.paint.Color.GREEN);
+                    
+                    teleporters[row][col] = teleporter; //store reference
+                    root.getChildren().add(teleporter);
                 }
             }
         }

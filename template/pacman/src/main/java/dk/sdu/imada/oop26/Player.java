@@ -76,6 +76,7 @@ public class Player {
             updatePosition();
             animateMouth();
             checkDot();
+            checkTeleporter();
         }
 
         if(ghosts == null) return;
@@ -154,6 +155,24 @@ public class Player {
             map.setTile(row, col, Map.EMPTY);
             map.removeDot(row, col);
             manager.startPowerMode();
+        }
+    }
+
+    //Only works if the teleporters are on the same row 
+    public void checkTeleporter() {
+        int tile = map.getTile(row, col);
+        int mapLength = map.getMapWidth() - 1;
+
+        if (tile == Map.TELEPORTER) {
+            
+            if (col == 0) {
+                col = mapLength;
+
+            } else {
+                col = 0;
+            } 
+
+            updatePosition();
         }
     }
 
