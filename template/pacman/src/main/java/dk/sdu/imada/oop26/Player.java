@@ -8,7 +8,7 @@ import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 
 public class Player {
-    
+
     private int row = 2;
     private int col = 2;
 
@@ -94,6 +94,7 @@ public class Player {
                 case POWER -> {
                     manager.addScore(200);
                     ghost.respawn();
+                    SoundManager.playGhostDeathSound();
                 }
                 default -> {}
             }
@@ -148,18 +149,18 @@ public class Player {
             manager.addScore(10);
             map.setTile(row, col, Map.EMPTY);
             map.removeDot(row, col);
+            SoundManager.playCollectSound();
         }
 
         if (tile == Map.POWER){
+            if (manager.getState() == Main.GameState.POWER) {return;}
             manager.addScore(50);
             map.setTile(row, col, Map.EMPTY);
             map.removeDot(row, col);
             manager.startPowerMode();
+            SoundManager.playPowerUpSound();
+            SoundManager.playPowerUpMusic();
         }
-
-        if (!map.hasRemainingDots()) {
-        manager.levelComplete();
-}
     }
 
     //Only works if the teleporters are on the same row 
