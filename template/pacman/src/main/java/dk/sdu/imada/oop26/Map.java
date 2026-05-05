@@ -13,30 +13,66 @@ public class Map {
     public static final int EMPTY = -1;
     public static final int TELEPORTER = 3;
 
-    // 0 = dot, 1= wall, 2 = power, 3 = teleporter
-    private int[][] map ={
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1},
-        {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1}, 
-        {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
-        {3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3},
-        {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1}, 
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1}, 
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+    private int[][][] levels = {
+
+        // LEVEL 1
+        {
+            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1},
+            {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
+            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1}, 
+            {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
+            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+            {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
+            {3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3},
+            {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1}, 
+            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+            {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
+            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+            {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
+            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1}, 
+            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+        },
+
+        // LEVEL 2
+        {
+            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+            {1,2,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,2,1},
+            {1,0,1,1,1,0,1,0,1,1,1,0,1,0,1,1,1,0,1},
+            {1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1},
+            {1,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,1,0,1},
+            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+            {3,0,1,1,1,0,1,0,1,1,1,0,1,0,1,1,1,0,3},
+            {1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1},
+            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+        }
     };
 
+    private int[][] map;
     private Circle[][] dots;
-
     private Pane root;
 
-    private Rectangle[][] teleporters;
+    public Map(Pane root){
+        this.root = root;
+        loadLevel(0);
+    }
+
+    public void loadLevel(int levelIndex) {
+        map = levels[levelIndex % levels.length];
+        dots = new Circle[map.length][map[0].length];
+        redraw();
+    }
+
+    public boolean hasRemainingDots() {
+        for (int row = 0; row < map.length; row++) {
+            for (int col = 0; col < map[row].length; col++) {
+                if (map[row][col] == DOT || map[row][col] == POWER) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     public int getTile(int row, int col){
         return map[row][col];
@@ -50,68 +86,36 @@ public class Map {
         return map[0].length;
     }
 
-    public Map(Pane root){
-        this.root = root;
-        dots = new Circle[map.length][map[0].length];
-        teleporters = new Rectangle[map.length][map[0].length];
+    public void redraw(){
+        root.getChildren().clear();
         draw();
     }
 
     public void draw(){
-
         for (int row = 0; row < map.length; row++){
             for(int col = 0; col < map[row].length; col++){
 
-                // WALLS (draw once, never stored)
                 if (map[row][col] == WALL){
-                    Rectangle wall = new Rectangle(
-                        col * TILE_SIZE,
-                        row * TILE_SIZE,
-                        TILE_SIZE,
-                        TILE_SIZE
-                    );
+                    Rectangle wall = new Rectangle(col*TILE_SIZE,row*TILE_SIZE,TILE_SIZE,TILE_SIZE);
                     wall.setFill(javafx.scene.paint.Color.BLUE);
-                   root.getChildren().add(wall);
+                    root.getChildren().add(wall);
                 }
 
-                // DOTS (store them!)
-                if (map[row][col] == DOT){
+                if (map[row][col] == DOT || map[row][col] == POWER){
                     Circle dot = new Circle(
-                        col * TILE_SIZE + TILE_SIZE / 2,
-                        row * TILE_SIZE + TILE_SIZE / 2,
-                        5
+                        col*TILE_SIZE + TILE_SIZE/2,
+                        row*TILE_SIZE + TILE_SIZE/2,
+                        map[row][col] == DOT ? 5 : 10
                     );
-                    dot.setFill(javafx.scene.paint.Color.YELLOW);
-
-                    dots[row][col] = dot; // store reference
+                    dot.setFill(map[row][col] == DOT ? javafx.scene.paint.Color.YELLOW : javafx.scene.paint.Color.ORANGE);
+                    dots[row][col] = dot;
                     root.getChildren().add(dot);
                 }
 
-                // POWER DOTS (also store!)
-                if (map[row][col] == POWER){
-                    Circle dot = new Circle(
-                        col * TILE_SIZE + TILE_SIZE / 2,
-                        row * TILE_SIZE + TILE_SIZE / 2,
-                        10
-                    );
-                    dot.setFill(javafx.scene.paint.Color.ORANGE);
-
-                    dots[row][col] = dot; // store reference
-                    root.getChildren().add(dot);
-                }
-
-                // TELEPORTERS (also store)
-                if (map[row][col] == TELEPORTER) {
-                    Rectangle teleporter = new Rectangle(
-                        col * TILE_SIZE,
-                        row * TILE_SIZE,
-                        TILE_SIZE,
-                        TILE_SIZE
-                    );
-                    teleporter.setFill(javafx.scene.paint.Color.GREEN);
-                    
-                    teleporters[row][col] = teleporter; //store reference
-                    root.getChildren().add(teleporter);
+                if (map[row][col] == TELEPORTER){
+                    Rectangle t = new Rectangle(col*TILE_SIZE,row*TILE_SIZE,TILE_SIZE,TILE_SIZE);
+                    t.setFill(javafx.scene.paint.Color.GREEN);
+                    root.getChildren().add(t);
                 }
             }
         }
@@ -124,17 +128,8 @@ public class Map {
         }
     }
 
-    public void redraw(){
-        root.getChildren().clear();
-        draw();
-    }
-
     public boolean isWall(int row, int col) {
-
-        if (row < 0 || col < 0 || row >= map.length || col >= map[0].length) {
-            return true; // out of bounds = wall
-        }
-
+        if (row < 0 || col < 0 || row >= map.length || col >= map[0].length) return true;
         return map[row][col] == WALL;
-}
+    }
 }

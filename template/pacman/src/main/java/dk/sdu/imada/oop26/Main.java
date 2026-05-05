@@ -2,7 +2,7 @@ package dk.sdu.imada.oop26;
 
 import java.util.List;
 
-import dk.sdu.imada.oop26.Main.GameState;
+//import dk.sdu.imada.oop26.Main.GameState;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -17,6 +17,7 @@ public class Main extends Application {
         NORMAL,
         POWER,
         IMMUNE,
+        LEVEL_COMPLETE,
         FINISHED
     }
 
@@ -29,7 +30,7 @@ public class Main extends Application {
         Pane root = new Pane();
         root.setStyle("-fx-background-color: black;");
 
-        // UI + Manager
+        // UI
         Label ui = new Label();
         ui.setLayoutX(40);
         ui.setLayoutY(6);
@@ -63,50 +64,55 @@ public class Main extends Application {
 
         GameManager manager = new GameManager(ui);
 
-        //objects
+        // Objects
         map = new Map(root);
         player = new Player(root, map, manager);
+
         Ghost hunter = new Ghost(root, map, manager, new HunterBehavior());
         Ghost assassin = new Ghost(root, map, manager, new AssassinBehavior());
         Ghost random = new Ghost(root, map, manager, new RandomBehavior());
         Ghost passive = new Ghost(root, map, manager, new PassiveBehavior());
 
         ghosts = List.of(hunter, assassin, random, passive);
-
         player.setGhost(ghosts);
 
-        // Keep overlays on top of map/characters.
         root.getChildren().addAll(ui, help, endMessage);
-
-        /*ghost = new Ghost(root, map, manager);
-        player.setGhost(ghost);*/
 
         Scene scene = new Scene(root, 760, 600);
 
-        //Input
+        // Input
         scene.setOnKeyPressed(e -> {
 
-        if (manager.getState() == GameState.FINISHED) {
-            if (e.getCode() == KeyCode.X) {
-                stage.close();             // lukker vinduet
-                start(new Stage());        // åbner nyt vindue
+            // GAME OVER
+            if (manager.getState() == GameState.FINISHED) {
+                if (e.getCode() == KeyCode.X) {
+                    stage.close();
+                    start(new Stage());
+                }
+                return;
             }
-            return;
+
+            // NEXT LEVEL
+            if (manager.getState() == GameState.LEVEL_COMPLETE) {
+                if (e.getCode() == KeyCode.N) {
+                    nextLevel(root, manager, ui, help, endMessage);
+                }
+                return;
             }
 
             player.handleInput(e.getCode());
         });
 
-        
-
-        //AnimLoop
+        // Game Loop
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
 
-                //stop
                 if (manager.getState() == GameState.FINISHED){
                     endMessage.setText("Game Over - Press X to restart");
+                    return;
+                } else if (manager.getState() == GameState.LEVEL_COMPLETE) {
+                    endMessage.setText("Level Complete! Press N");
                     return;
                 } else {
                     endMessage.setText("");
@@ -117,169 +123,39 @@ public class Main extends Application {
                 for (Ghost g : ghosts) {
                     g.update(player);
                 }
-
-                //ghost.update(player);
             }
         };
 
-        timer.start();;
+        timer.start();
 
         stage.setScene(scene);
         stage.setTitle("Pac-Man");
         stage.show();
     }
 
+    private void nextLevel(Pane root, GameManager manager, Label ui, Label help, Label endMessage) {
+
+        manager.nextLevel();
+
+        map.loadLevel(manager.getLevel());
+
+        // recreate player
+        player = new Player(root, map, manager);
+
+        // recreate ghosts
+        Ghost hunter = new Ghost(root, map, manager, new HunterBehavior());
+        Ghost assassin = new Ghost(root, map, manager, new AssassinBehavior());
+        Ghost random = new Ghost(root, map, manager, new RandomBehavior());
+        Ghost passive = new Ghost(root, map, manager, new PassiveBehavior());
+
+        ghosts = List.of(hunter, assassin, random, passive);
+        player.setGhost(ghosts);
+
+        // re-add UI (important after redraw)
+        root.getChildren().addAll(ui, help, endMessage);
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
-
-    /* initial code when finding out what was needed
-
-
-    int pacmanRow = 1;
-    int pacmanCol = 1;
-
-    private final int TILE_SIZE = 40;
-        // 1 = wall, 0 = path
-        private final int[][] map = {
-            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1}, 
-            {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1}, 
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-            {1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1}, 
-            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
-        };
-    private int score = 0;
-
-     private void drawMap(Pane root) {
-            for (int row = 0; row < map.length; row++){
-                for(int col = 0; col < map[row].length; col++){
-
-                    if (map[row][col] == 1){
-                        Rectangle wall = new Rectangle(
-                            col * TILE_SIZE,
-                            row * TILE_SIZE,
-                            TILE_SIZE,
-                            TILE_SIZE
-                        );
-                        wall.setFill(javafx.scene.paint.Color.BLUE);
-                        root.getChildren().add(wall);
-                    }
-                    if (map[row][col] == 0){
-                        Circle dot = new Circle(
-                            col * TILE_SIZE + TILE_SIZE / 2,
-                            row * TILE_SIZE + TILE_SIZE / 2,
-                            5
-                        );
-                        dot.setFill(javafx.scene.paint.Color.YELLOW);
-                        root.getChildren().add(dot);
-                    }
-                }
-            }
-        }
-
-    @Override
-    public void start(Stage primaryStage){
-        Pane root = new Pane();
-
-        Scene scene = new Scene(root, 760, 600);
-
-        primaryStage.setTitle("Pac-man");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-
-        // Pacman
-        Arc pacman = new Arc(100,100,20,20,45,270);
-        pacman.setType(ArcType.ROUND);
-
-        // Ghost
-        Circle ghost = new Circle(20);
-        ghost.setCenterX(5 * TILE_SIZE);
-        ghost.setCenterY(2 * TILE_SIZE);
-        ghost.setFill(javafx.scene.paint.Color.RED);*/
-
-        /*Circle pacman = new Circle(20);
-        pacman.setCenterX(100);
-        pacman.setCenterY(100);*/
-/*
-        root.getChildren().add(pacman);
-        root.getChildren().add(ghost);
-
-        scene.setOnKeyPressed(event ->{
-            int newRow = pacmanRow;
-            int newCol = pacmanCol;
-
-            switch (event.getCode()){
-                case W -> newRow--;
-                case S -> newRow++;
-                case A -> newCol--;
-                case D -> newCol++;
-            }
-            //Wall Collition
-            if (map[newRow][newCol] != 1){
-                pacmanRow = newRow;
-                pacmanCol = newCol;
-
-                //Removing dots
-                if (map[newRow][newCol] == 0){
-                    map[newRow][newCol] = 2; //removed or eaten
-                    score++;
-                    System.out.println("Score: " + score);
-                }
-                
-                //Update pacman position
-                pacman.setCenterX(pacmanCol * TILE_SIZE + TILE_SIZE / 2);
-                pacman.setCenterY(pacmanRow * TILE_SIZE + TILE_SIZE / 2);
-
-                //Redraw everything
-                root.getChildren().clear();
-                drawMap(root);
-                root.getChildren().add(pacman);
-                root.getChildren().add(ghost);
-            }
-        });*/
-        
-        /*scene.setOnKeyPressed(event ->{
-
-
-            switch(event.getCode()){
-                case W -> pacman.setCenterY(pacman.getCenterY() - 10);
-                case S -> pacman.setCenterY(pacman.getCenterY() + 10);
-                case A -> pacman.setCenterX(pacman.getCenterX() - 10);
-                case D -> pacman.setCenterX(pacman.getCenterX() + 10);
-            }
-        });*/
-/*
-        AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long now){
-                if (pacman.getBoundsInParent().intersects(ghost.getBoundsInParent())) {
-                    System.out.println("Loser");
-                    stop(); // stop the game loop
-                }
-            }
-        };
-        timer.start();
-
-        drawMap(root);
-        }
-        */
-    /*public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("hello imada");
-        Label label = new Label("Hello IMADA students :)");
-        label.setAlignment(Pos.CENTER);
-        Scene scene = new Scene(label, 400, 200);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }*/
-   
 }

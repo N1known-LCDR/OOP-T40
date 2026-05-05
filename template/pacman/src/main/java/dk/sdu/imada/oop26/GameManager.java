@@ -7,6 +7,8 @@ public class GameManager {
     
     private int score = 0;
     private int lives = 3;
+    private int currentLevel = 0;
+
     private GameState state = GameState.NORMAL;
 
     private Label uiLabel;
@@ -44,17 +46,34 @@ public class GameManager {
         return state;
     }
 
+    public int getLevel() {
+        return currentLevel;
+    }
+
+    public void nextLevel() {
+        currentLevel++;
+        state = GameState.NORMAL;
+        updateUI();
+    }
+
+    public void levelComplete() {
+        state = GameState.LEVEL_COMPLETE;
+        updateUI();
+    }
+
     private void updateUI(){
         if (state == GameState.FINISHED){
             uiLabel.setText("Game Over - Score: " + score + " | Press X to restart");
+        } else if (state == GameState.LEVEL_COMPLETE){
+            uiLabel.setText("Level Complete! Press N for next level");
         } else {
-            uiLabel.setText("Score: " + score + " | Lives: " + lives + " | State: " + state);
+            uiLabel.setText("Score: " + score + " | Lives: " + lives + " | Level: " + (currentLevel + 1) + " | State: " + state);
         }
     }
 
     private void startImmuneTimer() {
-    javafx.animation.PauseTransition pause = 
-        new javafx.animation.PauseTransition(javafx.util.Duration.seconds(2));
+        javafx.animation.PauseTransition pause = 
+            new javafx.animation.PauseTransition(javafx.util.Duration.seconds(2));
 
         pause.setOnFinished(e -> {
             if (state == GameState.IMMUNE) {
@@ -67,11 +86,11 @@ public class GameManager {
     }
 
     public void startPowerMode() {
-    state = GameState.POWER;
-    updateUI();
+        state = GameState.POWER;
+        updateUI();
 
-    javafx.animation.PauseTransition pause = 
-        new javafx.animation.PauseTransition(javafx.util.Duration.seconds(10));
+        javafx.animation.PauseTransition pause = 
+            new javafx.animation.PauseTransition(javafx.util.Duration.seconds(10));
 
         pause.setOnFinished(e -> {
             if (state == GameState.POWER) {
@@ -82,5 +101,4 @@ public class GameManager {
 
         pause.play();
     }
-
 }

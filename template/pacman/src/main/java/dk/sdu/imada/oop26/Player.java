@@ -156,6 +156,10 @@ public class Player {
             map.removeDot(row, col);
             manager.startPowerMode();
         }
+
+        if (!map.hasRemainingDots()) {
+        manager.levelComplete();
+}
     }
 
     //Only works if the teleporters are on the same row 
