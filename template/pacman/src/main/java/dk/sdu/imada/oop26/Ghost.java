@@ -7,8 +7,14 @@ import java.util.Random;
 import dk.sdu.imada.oop26.Main.GameState;
 
 public class Ghost {
-    private int row = 13;
-    private int col = 17;
+    //private int row = 13;
+    //private int col = 17;
+
+    private int row;
+    private int col;
+
+    private int spawnRow;
+    private int spawnCol;
 
     private Circle view;
     private Map map;
@@ -17,6 +23,8 @@ public class Ghost {
     private GameManager manager;
 
     private GhostBehavior behavior;
+
+    private boolean active = true;
 
     public int getRow(){
         return row;
@@ -34,6 +42,14 @@ public class Ghost {
         this.manager = manager;
         this.behavior = behavior;
 
+        int[] spawn = map.getGhostSpawn();
+
+        spawnRow = spawn[0];
+        spawnCol = spawn[1];
+
+        row = spawnRow;
+        col = spawnCol;
+
         view = new Circle(15);
         view.setFill(javafx.scene.paint.Color.RED);
 
@@ -42,6 +58,7 @@ public class Ghost {
     }
 
     public void update(Player player){
+        if(!active) return;
 
         long now = System.nanoTime();
 
@@ -166,9 +183,29 @@ public class Ghost {
     }
 
     public void respawn(){
-        row = 11;
+        /*row = 11;
         col = 9;
+        updatePosition();*/
+
+        active = false;
+
+        row = spawnRow;
+        col = spawnCol;
+
         updatePosition();
+
+        view.setVisible(false);
+
+        javafx.animation.PauseTransition pause = 
+            new javafx.animation.PauseTransition(
+                javafx.util.Duration.seconds(5)
+            );
+
+            pause.setOnFinished(e -> {
+                active = true;
+                view.setVisible(true);
+            });
+            pause.play();
     }
 
     private void updatePosition(){

@@ -9,8 +9,13 @@ import javafx.scene.shape.ArcType;
 
 public class Player {
     
-    private int row = 2;
-    private int col = 2;
+    //private int row = 2;
+    //private int col = 2;
+
+    private int row;
+    private int col;
+    private int spawnRow;
+    private int sapwnCol;
 
     private int dx = 0;
     private int dy = 0;
@@ -36,6 +41,14 @@ public class Player {
     public Player(Pane root, Map map, GameManager manager) {
         this.map = map;
         this.manager = manager;
+
+        int[] spawn = map.getPlayerSpawn();
+
+        spawnRow = spawn[0];
+        sapwnCol = spawn[1];
+
+        row = spawnRow;
+        col = sapwnCol;
 
         view = new Arc(0,0,15,15,45,270);
         view.setType(ArcType.ROUND);
@@ -88,7 +101,8 @@ public class Player {
             switch (manager.getState()){
                 case NORMAL -> {
                     manager.loseLife();
-                return; // stops after hit
+                    respawn();
+                    return;
             }
 
                 case POWER -> {
@@ -139,6 +153,16 @@ public class Player {
 
     public Arc getView(){
         return view;
+    }
+
+    public void respawn(){
+        row = spawnRow;
+        col = sapwnCol;
+
+        dx = 0;
+        dy = 0;
+
+        updatePosition();
     }
 
     public void checkDot(){
