@@ -2,7 +2,6 @@ package dk.sdu.imada.oop26;
 
 import java.util.List;
 
-//import dk.sdu.imada.oop26.Main.GameState;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -63,6 +62,8 @@ public class Main extends Application {
         );
 
         GameManager manager = new GameManager(ui);
+        SoundManager.init();
+        SoundManager.playMainMusic();
 
         // Objects
         map = new Map(root);

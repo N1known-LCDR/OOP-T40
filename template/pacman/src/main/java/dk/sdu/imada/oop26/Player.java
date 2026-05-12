@@ -108,6 +108,7 @@ public class Player {
                 case POWER -> {
                     manager.addScore(200);
                     ghost.respawn();
+                    SoundManager.playGhostDeathSound();
                 }
                 default -> {}
             }
@@ -172,6 +173,7 @@ public class Player {
             manager.addScore(10);
             map.setTile(row, col, Map.EMPTY);
             map.removeDot(row, col);
+            SoundManager.playCollectSound();
         }
 
         if (tile == Map.POWER){
@@ -179,6 +181,8 @@ public class Player {
             map.setTile(row, col, Map.EMPTY);
             map.removeDot(row, col);
             manager.startPowerMode();
+            SoundManager.playPowerUpSound();
+            SoundManager.playPowerUpMusic();
         }
 
         if (!map.hasRemainingDots()) {

@@ -29,8 +29,10 @@ public class GameManager {
         lives--;
 
         if (lives <= 0) {
+            SoundManager.playGameLoseSound();
             state = GameState.FINISHED;
         } else {
+            SoundManager.playPlayerDeathSound();
             setState(GameState.IMMUNE);
             startImmuneTimer();
         }
@@ -57,6 +59,7 @@ public class GameManager {
     }
 
     public void levelComplete() {
+        SoundManager.playLevelCompleteSound();
         state = GameState.LEVEL_COMPLETE;
         updateUI();
     }
