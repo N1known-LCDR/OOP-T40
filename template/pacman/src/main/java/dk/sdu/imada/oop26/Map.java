@@ -202,6 +202,10 @@ public class Map {
     private Circle[][] dots;
     private Pane root;
 
+    public int getMapHeight(){
+        return map.length;
+    }
+
     public Map(Pane root){
         this.root = root;
         loadLevel(0);
