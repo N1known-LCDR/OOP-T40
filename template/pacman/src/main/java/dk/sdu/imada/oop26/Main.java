@@ -53,13 +53,20 @@ public class Main extends Application {
         );
 
         Label endMessage = new Label("");
-        endMessage.setLayoutX(220);
-        endMessage.setLayoutY(20);
+        endMessage.setLayoutX(0);
+        endMessage.setLayoutY(250);
+        endMessage.setPrefWidth(760);
+        endMessage.setAlignment(javafx.geometry.Pos.CENTER);
         endMessage.setStyle(
-            "-fx-font-size: 22px;" +
+            "-fx-font-size: 36px;" +
             "-fx-font-weight: bold;" +
-            "-fx-text-fill: red;"
+            "-fx-text-fill: white;" +
+            "-fx-background-color: rgba(0,0,0,0.65);" +
+            "-fx-padding: 16px;" +
+            "-fx-border-color: red;" +
+            "-fx-border-width: 3px;"
         );
+        endMessage.setVisible(false);
 
         GameManager manager = new GameManager(ui);
         SoundManager.init();
@@ -76,7 +83,6 @@ public class Main extends Application {
 
         ghosts = List.of(hunter, assassin, random, passive);
         player.setGhost(ghosts);
-        for (Ghost g : ghosts) g.setAllGhosts(ghosts);
 
         root.getChildren().addAll(ui, help, endMessage);
 
@@ -112,12 +118,15 @@ public class Main extends Application {
 
                 if (manager.getState() == GameState.FINISHED){
                     endMessage.setText("Game Over - Press X to restart");
+                    endMessage.setVisible(true);
                     return;
                 } else if (manager.getState() == GameState.LEVEL_COMPLETE) {
                     endMessage.setText("Level Complete! Press N");
+                    endMessage.setVisible(true);
                     return;
                 } else {
                     endMessage.setText("");
+                    endMessage.setVisible(false);
                 }
 
                 player.update();
