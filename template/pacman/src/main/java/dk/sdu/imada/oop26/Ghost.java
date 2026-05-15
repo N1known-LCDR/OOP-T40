@@ -3,6 +3,7 @@ package dk.sdu.imada.oop26;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import java.util.Random;
+import java.util.List;
 
 import dk.sdu.imada.oop26.Main.GameState;
 
@@ -25,6 +26,20 @@ public class Ghost {
     private GhostBehavior behavior;
 
     private boolean active = true;
+    private List<Ghost> allGhosts;
+
+    public void setAllGhosts(List<Ghost> ghosts) {
+        this.allGhosts = ghosts;
+    }
+
+    private boolean isOccupiedByOtherGhosts(int r, int c){
+        if (allGhosts == null) return false;
+        for (Ghost g : allGhosts){
+            if (g == this || ! g.active) continue;
+            if (g.getRow() == r && g.getCol() == c) return true;
+        }
+        return false;
+    }
 
     public int getRow(){
         return row;
@@ -134,7 +149,7 @@ public class Ghost {
     public void moveTowards(int targetRow, int targetCol){
 
         int[] step = Pathfinder.nextStep(map, row, col, targetRow, targetCol);
-        if (step != null){
+        if (step != null && !isOccupiedByOtherGhosts(step[0], step[1])){
             row = step[0];
             col = step[1];
         }else{
@@ -167,6 +182,7 @@ public class Ghost {
             int nr = row + d[0];
             int nc = col + d[1];
             if (map.isWall(nr, nc)) continue;
+            if(isOccupiedByOtherGhosts(nr, nc)) continue;
 
             int dist = Math.abs(nr - player.getRow()) + Math.abs(nc - player.getCol());
             if (dist > bestDist) {
@@ -207,7 +223,7 @@ public class Ghost {
         for (int[] dir : directions){
             int newRow = row + dir[0];
             int newCol = col + dir[1];
-            if (!map.isWall(newRow, newCol)){
+            if (!map.isWall(newRow, newCol) && !isOccupiedByOtherGhosts(newRow, newCol)){
                 row = newRow;
                 col = newCol;
                 return;
