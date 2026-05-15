@@ -18,6 +18,9 @@ public class SoundManager {
     public static MediaPlayer levelComplete;
     public static MediaPlayer gameLose;
 
+    private static Timer timer = new Timer();
+    private static TimerTask currentTask;
+
     //Init function to create all the Mediaplayers
     public static void init() {
 
@@ -56,17 +59,22 @@ public class SoundManager {
     public static void playPowerUpMusic() {
         mainMusic.setVolume(0.0);
         play(powerUpMusic);
-        //after 10 seconds setVolume to 1.0
-        Timer timer = new Timer();
 
-        timer.schedule(new TimerTask() {
+        //cancel to stop duplicate sounds
+        if (currentTask != null) {
+        currentTask.cancel();
+        }
+
+        //after 10 seconds setVolume to 1.0
+        currentTask = new TimerTask() {
             @Override
             public void run() {
                 Platform.runLater(() -> {
                     mainMusic.setVolume(1.0);
                 });
             }
-        }, 10000);
+        };
+        timer.schedule(currentTask, 10000);
     }
 
     public static void playPowerUpSound() {
