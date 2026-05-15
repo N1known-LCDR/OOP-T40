@@ -83,6 +83,7 @@ public class Main extends Application {
 
         ghosts = List.of(hunter, assassin, random, passive);
         player.setGhost(ghosts);
+        for (Ghost g : ghosts) g.setAllGhosts(ghosts);
         
 
         root.getChildren().addAll(ui, help, endMessage);
