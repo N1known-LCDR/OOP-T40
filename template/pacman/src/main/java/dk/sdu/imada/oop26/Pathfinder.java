@@ -1,7 +1,7 @@
 package dk.sdu.imada.oop26;
 
-import java.util;
-import java.util.Queue.*;
+import java.util.*;
+//import java.util.Queue.*;
 
 public class Pathfinder {
 

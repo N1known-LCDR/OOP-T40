@@ -13,6 +13,8 @@ public class GameManager {
 
     private Label uiLabel;
 
+    private javafx.animation.PauseTransition powerTimer;
+
     public GameManager(Label uiLabel){
         this.uiLabel = uiLabel;
         updateUI();
@@ -92,16 +94,15 @@ public class GameManager {
         state = GameState.POWER;
         updateUI();
 
-        javafx.animation.PauseTransition pause = 
-            new javafx.animation.PauseTransition(javafx.util.Duration.seconds(10));
-
-        pause.setOnFinished(e -> {
-            if (state == GameState.POWER) {
+        if (powerTimer != null) powerTimer.stop();
+        powerTimer = new javafx.animation.PauseTransition(javafx.util.Duration.seconds(10));
+        powerTimer.setOnFinished(e ->{
+            if (state == GameState.POWER){
                 state = GameState.NORMAL;
                 updateUI();
             }
         });
 
-        pause.play();
+        powerTimer.play();
     }
 }

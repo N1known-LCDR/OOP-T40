@@ -64,6 +64,7 @@ public class Player {
             case DOWN ->{dx = 0; dy = 1; view.setStartAngle(315);}
             case LEFT ->{dx = -1; dy = 0; view.setStartAngle(225);}
             case RIGHT ->{dx = 1; dy = 0; view.setStartAngle(45);}
+            default -> {}
             /*
             case W -> newRow--;
             case S -> newRow++;
