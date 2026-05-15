@@ -1,7 +1,11 @@
 package dk.sdu.imada.oop26;
 
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.*;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.List;
 
@@ -17,7 +21,8 @@ public class Ghost {
     private int spawnRow;
     private int spawnCol;
 
-    private Circle view;
+    private Group view;
+    private ArrayList<Shape> bodyParts = new ArrayList<>();
     private Map map;
     private Random random = new Random();
 
@@ -65,8 +70,7 @@ public class Ghost {
         row = spawnRow;
         col = spawnCol;
 
-        view = new Circle(15);
-        view.setFill(javafx.scene.paint.Color.RED);
+        view = createGhostView(Color.RED);
 
         updatePosition();
         root.getChildren().add(view);
@@ -81,16 +85,63 @@ public class Ghost {
 
             if(manager.getState() == GameState.POWER){
                 moveAwayFromPlayer(player);
-                view.setFill(javafx.scene.paint.Color.GRAY);
+                setGhostColor(Color.GRAY);
             } else {
                 behavior.move(this, player, map);
-                view.setFill(javafx.scene.paint.Color.RED);
+                setGhostColor(Color.RED);
             }
 
             updatePosition();
             lastMoveTime = now;
         }
+    }
 
+    private Group createGhostView(Color color) {
+        Group ghost = new Group();
+
+        Arc head = new Arc(0, 0, 15, 15, 0, 180);
+        head.setType(ArcType.ROUND);
+
+        Rectangle body = new Rectangle(-15, 0, 30, 15);
+
+        Circle bump1 = new Circle(-10, 15, 5);
+        Circle bump2 = new Circle(0, 15, 5);
+        Circle bump3 = new Circle(10, 15, 5);
+
+        bodyParts.add(head);
+        bodyParts.add(body);
+        bodyParts.add(bump1);
+        bodyParts.add(bump2);
+        bodyParts.add(bump3);
+
+        Circle leftEye = new Circle(-6, -2, 4);
+        leftEye.setFill(Color.WHITE);
+
+        Circle rightEye = new Circle(6, -2, 4);
+        rightEye.setFill(Color.WHITE);
+
+        Circle leftPupil = new Circle(-6, -2, 2);
+        leftPupil.setFill(Color.BLACK);
+
+        Circle rightPupil = new Circle(6, -2, 2);
+        rightPupil.setFill(Color.BLACK);
+
+        setGhostColor(color);
+
+        ghost.getChildren().addAll(
+            head, body, bump1, bump2, bump3,
+            leftEye, rightEye, leftPupil, rightPupil
+        );
+
+        return ghost;
+    }
+
+    private void setGhostColor(Color color) {
+        for (Shape part : bodyParts) {
+            part.setFill(color);
+        }
+    }
+    
         /*
         long now = System.nanoTime();
 
@@ -99,7 +150,6 @@ public class Ghost {
             updatePosition();
             lastMoveTime = now;
         }*/
-    }
 
     /*public void moveTowardsPlayer(Player player){
         
@@ -270,11 +320,11 @@ public class Ghost {
     }
 
     private void updatePosition(){
-        view.setCenterX(col * map.TILE_SIZE + map.TILE_SIZE / 2);
-        view.setCenterY(row * map.TILE_SIZE + map.TILE_SIZE / 2);
+        view.setLayoutX(col * map.TILE_SIZE + map.TILE_SIZE / 2);
+        view.setLayoutY(row * map.TILE_SIZE + map.TILE_SIZE / 2);
     }
 
-    public Circle getView(){
+    public Node getView(){
         return view;
     }
 }
