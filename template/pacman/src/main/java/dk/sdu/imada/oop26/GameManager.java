@@ -56,8 +56,12 @@ public class GameManager {
 
     public void nextLevel() {
         currentLevel++;
-        state = GameState.NORMAL;
-        updateUI();
+        if (currentLevel >= 10){
+            gameWon();
+        } else {
+            state = GameState.NORMAL;
+            updateUI();
+        }
     }
 
     public void levelComplete() {
@@ -66,11 +70,19 @@ public class GameManager {
         updateUI();
     }
 
+    public void gameWon(){
+        //SoundMangager.playLevelCompleteSound();
+        state = GameState.GAME_WON;
+        updateUI();
+    }
+
     private void updateUI(){
         if (state == GameState.FINISHED){
             uiLabel.setText("Game Over - Score: " + score + " | Press X to restart");
         } else if (state == GameState.LEVEL_COMPLETE){
             uiLabel.setText("Level Complete! Press N for next level");
+        } else if (state == GameState.GAME_WON){
+            uiLabel.setText("YOU WIN!! Final Score: " + score + " | Press x to restart");
         } else {
             uiLabel.setText("Score: " + score + " | Lives: " + lives + " | Level: " + (currentLevel + 1) + " | State: " + state);
         }

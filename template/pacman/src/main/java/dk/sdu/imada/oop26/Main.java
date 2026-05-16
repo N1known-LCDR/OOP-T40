@@ -17,7 +17,8 @@ public class Main extends Application {
         POWER,
         IMMUNE,
         LEVEL_COMPLETE,
-        FINISHED
+        FINISHED,
+        GAME_WON
     }
 
     private Map map;
@@ -84,7 +85,6 @@ public class Main extends Application {
         ghosts = List.of(hunter, assassin, random, passive);
         player.setGhost(ghosts);
         for (Ghost g : ghosts) g.setAllGhosts(ghosts);
-        
 
         root.getChildren().addAll(ui, help, endMessage);
 
@@ -94,7 +94,7 @@ public class Main extends Application {
         scene.setOnKeyPressed(e -> {
 
             // GAME OVER
-            if (manager.getState() == GameState.FINISHED) {
+            if (manager.getState() == GameState.FINISHED || manager.getState() == GameState.GAME_WON) {
                 if (e.getCode() == KeyCode.X) {
                     stage.close();
                     start(new Stage());
@@ -118,18 +118,40 @@ public class Main extends Application {
             @Override
             public void handle(long now) {
 
-            if (manager.getState() == GameState.FINISHED){
-                endMessage.setText("Game Over - Press X to restart");
-                endMessage.setVisible(true);
-                return;
-            } else if (manager.getState() == GameState.LEVEL_COMPLETE) {
-                endMessage.setText("Level Complete! Press N");
-                endMessage.setVisible(true);
-                return;
-            } else {
-                endMessage.setText("");
-                endMessage.setVisible(false);
-            }
+                if (manager.getState() == GameState.FINISHED){
+                    endMessage.setText("Game Over - Press X to restart");
+                    endMessage.setStyle(
+                        "-fx-font-size: 36px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-background-color: rgba(0,0,0,0.65);" +
+                        "-fx-padding: 16px;" +
+                        "-fx-border-color: red;" +
+                        "-fx-border-width: 3px;"
+                    );
+                    endMessage.setVisible(true);
+                    return;
+                } else if (manager.getState() == GameState.LEVEL_COMPLETE) {
+                    endMessage.setText("Level Complete! Press N");
+                    endMessage.setVisible(true);
+                    return;
+                } else if (manager.getState() == GameState.GAME_WON) {
+                    endMessage.setText("YOU WIN! Press X to restart");
+                    endMessage.setStyle(
+                        "-fx-font-size: 36px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: gold;" +
+                        "-fx-background-color: rgba(0,0,0,0.75);" +
+                        "-fx-padding: 16px;" +
+                        "-fx-border-color: gold;" +
+                        "-fx-border-width: 3px;"
+                    );
+                    endMessage.setVisible(true);
+                    return;
+                } else {
+                    endMessage.setText("");
+                    endMessage.setVisible(false);
+                }
 
                 player.update();
 
@@ -149,7 +171,7 @@ public class Main extends Application {
     private void nextLevel(Pane root, GameManager manager, Label ui, Label help, Label endMessage) {
 
         manager.nextLevel();
-
+        if (manager.getState() == GameState.GAME_WON) return;
         map.loadLevel(manager.getLevel());
 
         // recreate player
