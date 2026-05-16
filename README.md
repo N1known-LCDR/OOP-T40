@@ -9,8 +9,8 @@ Maven
 You can verify the installation with:
 java -version,
 mvn -version,
-Project Setup
 
+Project Setup:
 Extract the Project
 
 Unzip the project folder:
