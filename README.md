@@ -36,6 +36,7 @@ Technologies Used
 Java 21
 JavaFX 21
 Maven
+
 Project Structure
 pacman/
 ├── pom.xml
