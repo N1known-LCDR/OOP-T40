@@ -3,12 +3,12 @@ The game was developed with Maven and Java 21.
 
 Requirements
 Before running the project, make sure you have the following installed:
-Java JDK 21
+Java JDK 21,
 Maven
 
 You can verify the installation with:
-java -version
-mvn -version
+java -version,
+mvn -version,
 Project Setup
 
 Extract the Project
