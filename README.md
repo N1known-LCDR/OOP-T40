@@ -62,3 +62,6 @@ mvn clean install
 mvn javafx:run
 
 
+Ai use
+
+AI was used to understand how Maven, Java, and JavaFX interact during compilation and runtime. This was especially useful because JavaFX requires additional setup compared to standard Java projects. All major code pieces and design decisions were done by the group.   Ai was only used as a supporting tool to find spelling/typing errors in the code. 
