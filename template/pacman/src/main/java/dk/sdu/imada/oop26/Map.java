@@ -247,13 +247,11 @@ public class Map {
             for (int col = 0; col < map[row].length; col++){
                 if(map[row][col] == GHOST_SPAWN){
                     spawns.add(new int[]{row,col});
-                    //return new int[]{row,col};
                 }
             }
         }
         if (spawns.isEmpty()) spawns.add(new int[]{5,5});
         return spawns;
-        //return new int[]{5,5}; //fallback
     }
 
     public int getTile(int row, int col){
