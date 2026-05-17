@@ -12,23 +12,32 @@ import java.util.List;
 import dk.sdu.imada.oop26.Main.GameState;
 
 public class Ghost {
-    
+   
+    // Current ghost position in the map grid
     private int row;
     private int col;
-
+    
+    // Original spawn position used when ghost respawns 
     private int spawnRow;
     private int spawnCol;
-
+    
+    // JavaFX group containing all visual ghostparts
     private Group view;
+
+    // Stores the ghost body so their color can be changed
     private ArrayList<Shape> bodyParts = new ArrayList<>();
+
+    // Refences
     private Map map;
     private Random random = new Random();
-
     private GameManager manager;
-
     private GhostBehavior behavior;
 
+    
+    // Controls whether the ghost can move and be shown
     private boolean active = true;
+
+    // List of all ghosts, used to avoid ghost overlap
     private List<Ghost> allGhosts;
 
     private Color defaultColor;
@@ -37,6 +46,7 @@ public class Ghost {
         this.allGhosts = ghosts;
     }
 
+    // Checks whether another active ghost is already on a tile
     private boolean isOccupiedByOtherGhosts(int r, int c){
         if (allGhosts == null) return false;
         for (Ghost g : allGhosts){
@@ -54,9 +64,13 @@ public class Ghost {
         return col;
     }
 
+    // Control how often the ghost moves
     private long lastMoveTime = 0;
+
+    // Delay between ghost moves
     private final long MOVE_DELAY = 500_000_000; //0.5 seconds in nanoseconds
 
+    // Sets spawn location, movement behavior, color, and adds ghost to screen
     public Ghost(Pane root, Map map, GameManager manager, GhostBehavior behavior, int spawnIndex, Color color) {
         this.map = map;
         this.manager = manager;
@@ -78,16 +92,21 @@ public class Ghost {
         root.getChildren().add(view);
     }
 
+    // Ensures ghost behave differently depending on the current game state.
     public void update(Player player){
         if(!active) return;
 
         long now = System.nanoTime();
 
+        // Only move if enough time has passed
         if (now - lastMoveTime >= MOVE_DELAY){
 
+            //Ghost turn gray and run away doing power mode
             if (manager.getState() == GameState.POWER){
                 moveAwayFromPlayer(player);
                 setGhostColor(Color.GRAY);
+
+            //Ghost chase pacman in normal mode
             } else if (manager.getState() == GameState.NORMAL){
                 behavior.move(this, player, map);
                 setGhostColor(defaultColor);
@@ -100,6 +119,7 @@ public class Ghost {
         }
     }
 
+    //Creats ghosts visual shape
     private Group createGhostView(Color color) {
         Group ghost = new Group();
 
@@ -147,6 +167,10 @@ public class Ghost {
     }
     
 
+    /*
+     * Moves the ghost toward a target tile.
+     * Uses pathfinding if possible, otherwise moves randomly.
+     */
     public void moveTowards(int targetRow, int targetCol){
 
         int[] step = Pathfinder.nextStep(map, row, col, targetRow, targetCol);
@@ -158,6 +182,10 @@ public class Ghost {
         }
     }
 
+    /*
+     * Moves ghost away from player
+     * Used when player has eaten a power pellet
+    */
     public void moveAwayFromPlayer(Player player){
         int[][] dirs = {{-1,0},{1,0},{0,-1},{0,1}};
         int bestDist = -1;
@@ -200,6 +228,11 @@ public class Ghost {
         }
     }
 
+     /*
+     * Respawns the ghost at its spawn point.
+     * The ghost disappears for 5 seconds before becoming active again.
+     */
+    
     public void respawn(){
 
         active = false;
@@ -209,6 +242,7 @@ public class Ghost {
 
         updatePosition();
 
+        // Hide ghost during respawn delay
         view.setVisible(false);
 
         javafx.animation.PauseTransition pause = 
@@ -228,6 +262,7 @@ public class Ghost {
         view.setLayoutY(row * map.TILE_SIZE + map.TILE_SIZE / 2);
     }
 
+    // Returns the JavaFX visual object for the ghost
     public Node getView(){
         return view;
     }
