@@ -18,7 +18,7 @@ public class Map {
     public static final int PLAYER_SPAWN = -2;
     public static final int GHOST_SPAWN = -3;
 
-    // Arrat storing all game levels. Each number shows specific tile type. 
+    // Array storing all game levels. Each number shows specific tile type. 
 
     private int[][][] levels = {
 
