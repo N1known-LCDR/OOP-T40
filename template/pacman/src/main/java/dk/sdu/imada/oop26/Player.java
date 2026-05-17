@@ -9,9 +9,6 @@ import javafx.scene.shape.ArcType;
 
 public class Player {
     
-    //private int row = 2;
-    //private int col = 2;
-
     private int row;
     private int col;
     private int spawnRow;
@@ -58,6 +55,7 @@ public class Player {
         root.getChildren().add(view);
     }
 
+    //gets the input, then changes direction and speed accordingly
     public void handleInput(KeyCode key) {
         switch(key){
             case UP ->{dx = 0; dy = -1; view.setStartAngle(135);}
@@ -65,15 +63,10 @@ public class Player {
             case LEFT ->{dx = -1; dy = 0; view.setStartAngle(225);}
             case RIGHT ->{dx = 1; dy = 0; view.setStartAngle(45);}
             default -> {}
-            /*
-            case W -> newRow--;
-            case S -> newRow++;
-            case A -> newCol--;
-            case D -> newCol++;
-            */
         }
     }
 
+    //updates player every time 150 miliseconds has passed, and returns if not. 
     public void update(){
 
         if (System.currentTimeMillis() - lastMove < 150) return;
@@ -84,6 +77,7 @@ public class Player {
         int newCol = col + dx;
         
 
+        //checks map collision and calls the methods to animate the mouth, check the pellets and activates the teleporter
         if (!map.isWall(newRow, newCol)) {
             row = newRow;
             col = newCol;
@@ -93,6 +87,7 @@ public class Player {
             checkTeleporter();
         }
 
+        //checks ghost collision, and either damages the player or ghost depending on state
         if(ghosts == null) return;
         for (Ghost ghost : ghosts){
             if (!view.getBoundsInParent().intersects(ghost.getView().getBoundsInParent())){
@@ -116,27 +111,6 @@ public class Player {
 
         }
 
-        /*if (ghost == null) return;
-        if (!view.getBoundsInParent().intersects(ghost.getView().getBoundsInParent())) return;
-
-        switch (manager.getState()) {
-            case NORMAL -> manager.loseLife();
-
-            case IMMUNE -> {
-                //uhmm ingenting
-            }
-
-            case POWER -> {
-                manager.addScore(200);
-                ghost.respawn();
-            }
-
-            case FINISHED -> {
-                //blank for nu
-            }
-                
-
-        }*/
     }
 
     private void updatePosition(){
@@ -144,6 +118,7 @@ public class Player {
         view.setCenterY(row * map.TILE_SIZE + map.TILE_SIZE / 2);
     }
 
+    //alternates between open and closed pacman mouth
     private void animateMouth() {
         mouthOpen = !mouthOpen;
         if (mouthOpen) {
@@ -157,6 +132,7 @@ public class Player {
         return view;
     }
 
+    //repsawns pacman at the spawn coordinates
     public void respawn(){
         row = spawnRow;
         col = spawnCol;
@@ -167,6 +143,7 @@ public class Player {
         updatePosition();
     }
 
+    //Checks if a tile has a pellet or a power pellet, and increases score accordingly, activates power mode if necesarry, and plays pickup sounds
     public void checkDot(){
         int tile = map.getTile(row, col);
 
@@ -186,11 +163,13 @@ public class Player {
             SoundManager.playPowerUpMusic();
         }
 
+        //wincon check
         if (!map.hasRemainingDots()) {
         manager.levelComplete();
 }
     }
 
+    //Teleports the player to the other side of the map if the tile is a teleporter
     //Only works if the teleporters are on the same row 
     public void checkTeleporter() {
         int tile = map.getTile(row, col);
