@@ -12,9 +12,7 @@ import java.util.List;
 import dk.sdu.imada.oop26.Main.GameState;
 
 public class Ghost {
-    //private int row = 13;
-    //private int col = 17;
-
+    
     private int row;
     private int col;
 
@@ -148,59 +146,6 @@ public class Ghost {
         }
     }
     
-        /*
-        long now = System.nanoTime();
-
-        if (now - lastMoveTime >= MOVE_DELAY){
-            moveTowardsPlayer(player);
-            updatePosition();
-            lastMoveTime = now;
-        }*/
-
-    /*public void moveTowardsPlayer(Player player){
-        
-        int newRow = row;
-        int newCol = col;
-
-        boolean moveVertically = random.nextBoolean();
-
-        if(moveVertically){
-            if(player.getRow() < row) newRow--;
-            else if (player.getRow() > row) newRow++;
-        } else {
-            if (player.getCol() < col) newCol--;
-            else if (player.getCol() > col) newCol++;
-        }
-
-        //Try move
-        if (!map.isWall(newRow, newCol)){
-            row = newRow;
-            col = newCol;
-        } else {
-            moveRandom();
-        }*/
-
-
-
-        /*
-        int bestRow = row;
-        int bestCol = col;
-
-        //try to go towards player
-        if (player.getRow() < row) bestRow--;
-        else if (player.getRow() > row) bestRow++;
-
-        if (player.getCol() < col) bestCol--;
-        else if (player.getCol() > col) bestCol++;
-
-        //Try move
-        if (!map.isWall(bestRow, bestCol)){
-            row = bestRow;
-            col = bestCol;
-        } else {
-            moveRandom();
-        } */
-    //}
 
     public void moveTowards(int targetRow, int targetCol){
 
@@ -211,22 +156,6 @@ public class Ghost {
         }else{
             moveRandom();
         }
-
-        /*int newRow = row;
-        int newCol = col;
-
-        if (targetRow < row) newRow--;
-        else if (targetRow > row) newRow++;
-
-        if(targetCol < col) newCol--;
-        else if (targetCol > col) newCol++;
-
-        if (!map.isWall(newRow, newCol)){
-            row = newRow;
-            col = newCol;
-        } else {
-            moveRandom();
-        }*/
     }
 
     public void moveAwayFromPlayer(Player player){
@@ -250,22 +179,6 @@ public class Ghost {
 
         row = bestRow;
         col = bestCol;
-
-        /*int bestRow = row;
-        int bestCol = col;
-
-        if(player.getRow() < row) bestRow++;
-        else if (player.getRow() > row) bestRow--;
-
-        if (player.getCol() < col) bestCol++;
-        else if (player.getCol() > col) bestCol--;
-
-        if (!map.isWall(bestRow, bestCol)){
-            row = bestRow;
-            col = bestCol;
-        } else {
-            moveRandom();
-        }*/
     }
 
     public void moveRandom(){
@@ -285,24 +198,9 @@ public class Ghost {
                 return;
             }
         }
-        /*int[][] directions = {{-1,0},{1,0},{0,-1},{0,1}};
-        for (int i = 0; i < 4; i++){
-            int[] dir = directions[random.nextInt(4)];
-            int newRow = row + dir[0];
-            int newCol = col + dir[1];
-
-            if (!map.isWall(newRow, newCol)){
-                row = newRow;
-                col = newCol;
-                break;
-            }
-        }*/
     }
 
     public void respawn(){
-        /*row = 11;
-        col = 9;
-        updatePosition();*/
 
         active = false;
 
