@@ -21,7 +21,7 @@ public class SoundManager {
     private static Timer timer = new Timer();
     private static TimerTask currentTask;
 
-    //Init function to create all the Mediaplayers
+    // Init function to create all the Mediaplayers
     public static void init() {
 
         mainMusic = createPlayer("/sounds/mainmusic.mp3");
@@ -39,34 +39,35 @@ public class SoundManager {
 
     }
 
-    //helper function to create MediaPlayer objects
+    // Helper function to create MediaPlayer objects
     public static MediaPlayer createPlayer(String path) {
         String uri = SoundManager.class.getResource(path).toExternalForm();
         return new MediaPlayer(new Media(uri));
     }    
 
-    //helper function to stop sounds before playing new ones
+    // Helper function to stop sounds before playing new ones
     public static void play(MediaPlayer player) {
         player.stop();
         player.play();
     }
 
-    //methods to play the sounds/music
+    // Static methods to play the sounds/music
     public static void playMainMusic() {
         play(mainMusic);
     }
 
     public static void playPowerUpMusic() {
+        // Mutes main music and starts powerup music
         mainMusic.setVolume(0.0);
         play(powerUpMusic);
 
-        //cancel to stop duplicate sounds
+        // Cancel to stop duplicate sounds
         if (currentTask != null) {
         currentTask.cancel();
         }
 
 
-        //after 10 seconds setVolume to 1.0
+        // After 10 seconds set mainmusic volume back to 1.0
         currentTask = new TimerTask() {
             @Override
             public void run() {
