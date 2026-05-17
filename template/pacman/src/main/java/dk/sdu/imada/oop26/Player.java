@@ -22,7 +22,6 @@ public class Player {
 
     private long lastMove = 0;
 
-    // To open Pac-Man's mouth
     private boolean mouthOpen = true;
 
     private Arc view;
