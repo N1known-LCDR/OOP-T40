@@ -1,12 +1,11 @@
 package dk.sdu.imada.oop26;
 
 import java.util.*;
-//import java.util.Queue.*;
 
 public class Pathfinder {
 
     /*
-    BFS from (startRow, StartCol) towards(targetRow, targetCol).
+    Breadth-First Search (BFS) from (startRow, StartCol) towards(targetRow, targetCol).
     Returns first  step [row,col] ghost should take,
     or null if no path exists
      */
@@ -24,7 +23,6 @@ public class Pathfinder {
         queue.add(new int[]{startRow, startCol});
         visited[startRow][startCol] = true;
 
-        //
         int[][] firstStep = new int[rows][cols];
         for (int[]row : firstStep) Arrays.fill(row, -1);
 
@@ -67,4 +65,3 @@ public class Pathfinder {
         return row * width + col;
     }
 }
-
