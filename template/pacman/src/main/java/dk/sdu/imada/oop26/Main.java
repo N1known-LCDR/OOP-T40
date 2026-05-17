@@ -77,10 +77,10 @@ public class Main extends Application {
         map = new Map(root);
         player = new Player(root, map, manager);
 
-        Ghost hunter = new Ghost(root, map, manager, new HunterBehavior());
-        Ghost assassin = new Ghost(root, map, manager, new AssassinBehavior());
-        Ghost random = new Ghost(root, map, manager, new RandomBehavior());
-        Ghost passive = new Ghost(root, map, manager, new PassiveBehavior());
+        Ghost hunter = new Ghost(root, map, manager, new HunterBehavior(), 0);
+        Ghost assassin = new Ghost(root, map, manager, new AssassinBehavior() ,1);
+        Ghost random = new Ghost(root, map, manager, new RandomBehavior() ,2);
+        Ghost passive = new Ghost(root, map, manager, new PassiveBehavior(), 3);
 
         ghosts = List.of(hunter, assassin, random, passive);
         player.setGhost(ghosts);
@@ -172,16 +172,20 @@ public class Main extends Application {
 
         manager.nextLevel();
         if (manager.getState() == GameState.GAME_WON) return;
+
+        root.getChildren().remove(player.getView());
+        for (Ghost g : ghosts) root.getChildren().remove(g.getView());
+
         map.loadLevel(manager.getLevel());
 
         // recreate player
         player = new Player(root, map, manager);
 
         // recreate ghosts
-        Ghost hunter = new Ghost(root, map, manager, new HunterBehavior());
-        Ghost assassin = new Ghost(root, map, manager, new AssassinBehavior());
-        Ghost random = new Ghost(root, map, manager, new RandomBehavior());
-        Ghost passive = new Ghost(root, map, manager, new PassiveBehavior());
+        Ghost hunter = new Ghost(root, map, manager, new HunterBehavior(), 0);
+        Ghost assassin = new Ghost(root, map, manager, new AssassinBehavior(), 1);
+        Ghost random = new Ghost(root, map, manager, new RandomBehavior(), 2);
+        Ghost passive = new Ghost(root, map, manager, new PassiveBehavior(), 3);
 
         ghosts = List.of(hunter, assassin, random, passive);
         player.setGhost(ghosts);

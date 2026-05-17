@@ -15,7 +15,7 @@ public class Player {
     private int row;
     private int col;
     private int spawnRow;
-    private int sapwnCol;
+    private int spawnCol;
 
     private int dx = 0;
     private int dy = 0;
@@ -45,10 +45,10 @@ public class Player {
         int[] spawn = map.getPlayerSpawn();
 
         spawnRow = spawn[0];
-        sapwnCol = spawn[1];
+        spawnCol = spawn[1];
 
         row = spawnRow;
-        col = sapwnCol;
+        col = spawnCol;
 
         view = new Arc(0,0,15,15,45,270);
         view.setType(ArcType.ROUND);
@@ -159,7 +159,7 @@ public class Player {
 
     public void respawn(){
         row = spawnRow;
-        col = sapwnCol;
+        col = spawnCol;
 
         dx = 0;
         dy = 0;

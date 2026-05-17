@@ -37,10 +37,13 @@ public class AssassinBehavior implements GhostBehavior {
 
         // overshoot sometimes
         if (Math.random() < 0.3) {
-            targetRow += dy * 2;
-            targetCol += dx * 2;
+            int overshotRow = targetRow += dy * 2;
+            int overshotCol = targetCol += dx * 2;
+            if(!map.isWall(overshotRow, overshotCol)){
+                targetRow = overshotRow;
+                targetCol = overshotCol;
+            }
         }
-
         ghost.moveTowards(targetRow, targetCol);
     }
 }

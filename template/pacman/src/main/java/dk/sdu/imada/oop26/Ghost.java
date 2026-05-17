@@ -57,12 +57,13 @@ public class Ghost {
     private long lastMoveTime = 0;
     private final long MOVE_DELAY = 500_000_000; //0.5 seconds in nanoseconds
 
-    public Ghost(Pane root, Map map, GameManager manager, GhostBehavior behavior) {
+    public Ghost(Pane root, Map map, GameManager manager, GhostBehavior behavior, int spawnIndex) {
         this.map = map;
         this.manager = manager;
         this.behavior = behavior;
 
-        int[] spawn = map.getGhostSpawn();
+        List<int[]> spawns = map.getGhostSpawns();
+        int[] spawn = spawns.get(spawnIndex % spawns.size());
 
         spawnRow = spawn[0];
         spawnCol = spawn[1];
@@ -83,12 +84,14 @@ public class Ghost {
 
         if (now - lastMoveTime >= MOVE_DELAY){
 
-            if(manager.getState() == GameState.POWER){
+            if (manager.getState() == GameState.POWER){
                 moveAwayFromPlayer(player);
                 setGhostColor(Color.GRAY);
-            } else {
+            } else if (manager.getState() == GameState.NORMAL){
                 behavior.move(this, player, map);
                 setGhostColor(Color.RED);
+            } else {
+                behavior.move(this, player, map);
             }
 
             updatePosition();

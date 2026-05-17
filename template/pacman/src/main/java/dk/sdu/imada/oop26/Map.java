@@ -3,6 +3,8 @@ package dk.sdu.imada.oop26;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Map {
     public final int TILE_SIZE = 40;
@@ -239,15 +241,19 @@ public class Map {
         return new int[]{1,1}; //fallback
     }
 
-     public int[] getGhostSpawn(){
+     public List<int[]> getGhostSpawns(){
+        List<int[]> spawns = new ArrayList<>();
         for (int row = 0; row < map.length; row++){
             for (int col = 0; col < map[row].length; col++){
                 if(map[row][col] == GHOST_SPAWN){
-                    return new int[]{row,col};
+                    spawns.add(new int[]{row,col});
+                    //return new int[]{row,col};
                 }
             }
         }
-        return new int[]{5,5}; //fallback
+        if (spawns.isEmpty()) spawns.add(new int[]{5,5});
+        return spawns;
+        //return new int[]{5,5}; //fallback
     }
 
     public int getTile(int row, int col){
