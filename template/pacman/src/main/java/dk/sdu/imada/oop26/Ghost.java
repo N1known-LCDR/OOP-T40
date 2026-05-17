@@ -168,8 +168,8 @@ public class Ghost {
     
 
     /*
-     * Moves the ghost toward a target tile.
-     * Uses pathfinding if possible, otherwise moves randomly.
+     Moves the ghost toward a target tile.
+     Uses pathfinding if possible, otherwise moves randomly.
      */
     public void moveTowards(int targetRow, int targetCol){
 
@@ -183,8 +183,8 @@ public class Ghost {
     }
 
     /*
-     * Moves ghost away from player
-     * Used when player has eaten a power pellet
+     Moves ghost away from player
+     Used when player has eaten a power pellet
     */
     public void moveAwayFromPlayer(Player player){
         int[][] dirs = {{-1,0},{1,0},{0,-1},{0,1}};
@@ -229,8 +229,8 @@ public class Ghost {
     }
 
      /*
-     * Respawns the ghost at its spawn point.
-     * The ghost disappears for 5 seconds before becoming active again.
+     Respawns the ghost at its spawn point.
+     The ghost disappears for 5 seconds before becoming active again.
      */
     
     public void respawn(){
