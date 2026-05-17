@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Map {
+    //Size of each tile in pixels
     public final int TILE_SIZE = 40;
-
+    //Tile type constants
     public static final int WALL = 1;
     public static final int DOT = 0;
     public static final int POWER = 2;
@@ -16,6 +17,8 @@ public class Map {
     public static final int TELEPORTER = 3;
     public static final int PLAYER_SPAWN = -2;
     public static final int GHOST_SPAWN = -3;
+
+    // Arrat storing all game levels. Each number shows specific tile type. 
 
     private int[][][] levels = {
 
@@ -199,26 +202,33 @@ public class Map {
             {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1} 
         }
     };
-
+    
+    //Current level map
     private int[][] map;
+    //Stores reference to pepels drawn on screen
     private Circle[][] dots;
+    // JavaFX root pane where map objects are drawn
     private Pane root;
 
+    //Returns the height of the map
     public int getMapHeight(){
         return map.length;
     }
 
+    //Constructor - initializes the first map and loads first level
     public Map(Pane root){
         this.root = root;
         loadLevel(0);
     }
 
+    //Loads a level from the level array and resests dots and redraws map
     public void loadLevel(int levelIndex) {
         map = levels[levelIndex % levels.length];
         dots = new Circle[map.length][map[0].length];
         redraw();
     }
 
+    //Checks if there are still dots or power pellets left to see if level is completed.
     public boolean hasRemainingDots() {
         for (int row = 0; row < map.length; row++) {
             for (int col = 0; col < map[row].length; col++) {
@@ -230,6 +240,7 @@ public class Map {
         return false;
     }
 
+    //Finds player spawn location in the map
     public int[] getPlayerSpawn(){
         for (int row = 0; row < map.length; row++){
             for (int col = 0; col < map[row].length; col++){
@@ -241,6 +252,7 @@ public class Map {
         return new int[]{1,1}; //fallback
     }
 
+    //Finds all ghost spawn positions
      public List<int[]> getGhostSpawns(){
         List<int[]> spawns = new ArrayList<>();
         for (int row = 0; row < map.length; row++){
@@ -254,23 +266,28 @@ public class Map {
         return spawns;
     }
 
+    //Fallback spawn location
     public int getTile(int row, int col){
         return map[row][col];
     }
 
+    // Returns the tile value at a specific location
     public void setTile(int row, int col, int value){
         map[row][col] = value;
     }
 
+    // Returns map width
     public int getMapWidth() {
         return map[0].length;
     }
 
+    //Clears the screen and redraws the map
     public void redraw(){
         root.getChildren().clear();
         draw();
     }
 
+    //Draws all map objects
     public void draw(){
         for (int row = 0; row < map.length; row++){
             for(int col = 0; col < map[row].length; col++){
@@ -301,6 +318,7 @@ public class Map {
         }
     }
 
+    // Removes a dot from the screen after it is collected
     public void removeDot(int row, int col){
         if (dots[row][col] != null){
             root.getChildren().remove(dots[row][col]);
@@ -308,6 +326,7 @@ public class Map {
         }
     }
 
+    //Checks if tile is wall and prevents movment outside map boundaries
     public boolean isWall(int row, int col) {
         if (row < 0 || col < 0 || row >= map.length || col >= map[0].length) return true;
         return map[row][col] == WALL;
