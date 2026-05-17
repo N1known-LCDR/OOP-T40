@@ -33,6 +33,8 @@ public class Ghost {
     private boolean active = true;
     private List<Ghost> allGhosts;
 
+    private Color defaultColor;
+
     public void setAllGhosts(List<Ghost> ghosts) {
         this.allGhosts = ghosts;
     }
@@ -57,7 +59,7 @@ public class Ghost {
     private long lastMoveTime = 0;
     private final long MOVE_DELAY = 500_000_000; //0.5 seconds in nanoseconds
 
-    public Ghost(Pane root, Map map, GameManager manager, GhostBehavior behavior, int spawnIndex) {
+    public Ghost(Pane root, Map map, GameManager manager, GhostBehavior behavior, int spawnIndex, Color color) {
         this.map = map;
         this.manager = manager;
         this.behavior = behavior;
@@ -71,7 +73,8 @@ public class Ghost {
         row = spawnRow;
         col = spawnCol;
 
-        view = createGhostView(Color.RED);
+        this.defaultColor = color;
+        view = createGhostView(color);
 
         updatePosition();
         root.getChildren().add(view);
@@ -89,7 +92,7 @@ public class Ghost {
                 setGhostColor(Color.GRAY);
             } else if (manager.getState() == GameState.NORMAL){
                 behavior.move(this, player, map);
-                setGhostColor(Color.RED);
+                setGhostColor(defaultColor);
             } else {
                 behavior.move(this, player, map);
             }

@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -77,10 +78,10 @@ public class Main extends Application {
         map = new Map(root);
         player = new Player(root, map, manager);
 
-        Ghost hunter = new Ghost(root, map, manager, new HunterBehavior(), 0);
-        Ghost assassin = new Ghost(root, map, manager, new AssassinBehavior() ,1);
-        Ghost random = new Ghost(root, map, manager, new RandomBehavior() ,2);
-        Ghost passive = new Ghost(root, map, manager, new PassiveBehavior(), 3);
+        Ghost hunter = new Ghost(root, map, manager, new HunterBehavior(), 0, Color.RED);
+        Ghost assassin = new Ghost(root, map, manager, new AssassinBehavior() ,1, Color.HOTPINK);
+        Ghost random = new Ghost(root, map, manager, new RandomBehavior() ,2, Color.YELLOW);
+        Ghost passive = new Ghost(root, map, manager, new PassiveBehavior(), 3, Color.CORNFLOWERBLUE);
 
         ghosts = List.of(hunter, assassin, random, passive);
         player.setGhost(ghosts);
@@ -182,10 +183,10 @@ public class Main extends Application {
         player = new Player(root, map, manager);
 
         // recreate ghosts
-        Ghost hunter = new Ghost(root, map, manager, new HunterBehavior(), 0);
-        Ghost assassin = new Ghost(root, map, manager, new AssassinBehavior(), 1);
-        Ghost random = new Ghost(root, map, manager, new RandomBehavior(), 2);
-        Ghost passive = new Ghost(root, map, manager, new PassiveBehavior(), 3);
+        Ghost hunter = new Ghost(root, map, manager, new HunterBehavior(), 0, Color.RED);
+        Ghost assassin = new Ghost(root, map, manager, new AssassinBehavior(), 1, Color.HOTPINK);
+        Ghost random = new Ghost(root, map, manager, new RandomBehavior(), 2, Color.YELLOW);
+        Ghost passive = new Ghost(root, map, manager, new PassiveBehavior(), 3, Color.CORNFLOWERBLUE);
 
         ghosts = List.of(hunter, assassin, random, passive);
         player.setGhost(ghosts);
